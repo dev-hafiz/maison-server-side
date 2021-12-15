@@ -27,7 +27,7 @@ async function run() {
           const database = client.db("Maison_commercial");
           const productsCollection = database.collection("products");
           const ordersCollection = database.collection("orders");
-
+          const reviewsCollection = database.collection("reviews");
           //GET API ALL PRODUCTS
           app.get('/products', async(req, res)=>{
                const cursor = productsCollection.find({});
@@ -67,7 +67,22 @@ async function run() {
                const result = await ordersCollection.deleteOne(query)
                res.json(result)
           })
+
+           //POST REVIEWS
+           app.post('/reviews', async(req, res)=>{
+               const review = req.body;
+               const result = await reviewsCollection.insertOne(review)
+               res.json(result)
+          })
           
+
+          //GET REVIEWS ALL
+          app.get('/reviews', async(req, res)=>{
+               const review = req.body; 
+               const cursor = reviewsCollection.find(review)
+               const result = await cursor.toArray()
+               res.json(result)
+          })
 
      }
      finally{
