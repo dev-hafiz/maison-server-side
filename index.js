@@ -29,7 +29,7 @@ async function run() {
           const ordersCollection = database.collection("orders");
           const reviewsCollection = database.collection("reviews");
           const usersCollection = database.collection("users");
-          
+
           //GET API ALL PRODUCTS
           app.get('/products', async(req, res)=>{
                const cursor = productsCollection.find({});
@@ -87,6 +87,23 @@ async function run() {
           })
 
 
+          //SAVED USER IN DATABASE
+             app.post('/users', async(req, res)=>{
+               const user = req.body;
+               const result = await usersCollection.insertOne(user)
+               res.json(result)
+          })
+
+           //UPSERT GOOGLE LOGIN
+           app.put('/users', async(req, res) =>{
+               const user = req.body;
+               const filter = {email: user.email};
+               const options= { upsert: true};
+               const updateDoc = {$set: user};
+               const result = await usersCollection.updateOne(filter, updateDoc, options);
+               res.json(result)
+          });
+
            //MAKE ADMIN
            app.put('/users/admin', async(req, res)=>{
                const user = req.body;
@@ -108,6 +125,12 @@ async function run() {
                res.json({admin: isAdmin});
           })
 
+          //ADD PRODUCTS
+          app.post('/products', async(req, res)=>{
+               const product = req.body;
+               const result = await productsCollection.insertOne(product)
+               res.json(result)
+          })
 
      }
      finally{
