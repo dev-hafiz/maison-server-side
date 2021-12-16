@@ -125,7 +125,7 @@ async function run() {
                res.json({admin: isAdmin});
           })
 
-          //ADD PRODUCTS
+          //ADD PRODUCTS FOR ALL DATA
           app.post('/products', async(req, res)=>{
                const product = req.body;
                const result = await productsCollection.insertOne(product)
